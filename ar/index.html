@@ -11,6 +11,11 @@
         <script src="js/GLTFLoader.js"></script>
         <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 		<script>
+            var textureSphere;
+            var textureLoader = new THREE.TextureLoader();
+            textureSphere = textureLoader.load( "textures/metal.jpg" );
+            textureSphere.mapping = THREE.SphericalReflectionMapping;
+            textureSphere.encoding = THREE.sRGBEncoding;
             var scene = new THREE.Scene();
             let ambientLight = new THREE.AmbientLight( 0xcccccc, 1.0 );
             scene.add( ambientLight );
@@ -38,11 +43,11 @@
                 'models/out.glb',
                 // called when the resource is loaded
                 function ( gltf ) {
-                    // gltf.scene.traverse( function ( child ) {
-					// 			if ( child.isMesh ) {
-					// 				child.material.envMap = envMap;
-					// 			}
-					// 		} );
+                    gltf.scene.traverse( function ( child ) {
+                        if ( child.isMesh ) {
+                            child.material.envMap = textureSphere;
+                        }
+                    } );
                     scene.add( gltf.scene );
 
                     gltf.animations; // Array<THREE.AnimationClip>
