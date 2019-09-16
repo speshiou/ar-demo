@@ -10,10 +10,15 @@
         <script src="js/three.min.js"></script>
         <script src="js/GLTFLoader.js"></script>
 		<script>
-			var scene = new THREE.Scene();
+            var scene = new THREE.Scene();
+            let ambientLight = new THREE.AmbientLight( 0xcccccc, 1.0 );
+            scene.add( ambientLight );
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
-			var renderer = new THREE.WebGLRenderer();
+			var renderer = new THREE.WebGLRenderer({
+                antialias : true,
+                alpha: true
+            });
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
@@ -29,7 +34,7 @@
             // Load a glTF resource
             loader.load(
                 // resource URL
-                'models/CesiumMan.gltf',
+                'models/scene/scene.gltf',
                 // called when the resource is loaded
                 function ( gltf ) {
 
