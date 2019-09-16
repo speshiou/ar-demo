@@ -29,15 +29,19 @@
 
             camera.position.z = 5;
             
-            var loader = new THREE.GLTFLoader();
+            var loader = new THREE.GLTFLoader().setPath( 'models/scene/' );;
 
             // Load a glTF resource
             loader.load(
                 // resource URL
-                'models/scene/scene.gltf',
+                'scene.gltf',
                 // called when the resource is loaded
                 function ( gltf ) {
-
+                    // gltf.scene.traverse( function ( child ) {
+					// 			if ( child.isMesh ) {
+					// 				child.material.envMap = envMap;
+					// 			}
+					// 		} );
                     scene.add( gltf.scene );
 
                     gltf.animations; // Array<THREE.AnimationClip>
