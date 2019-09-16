@@ -29,12 +29,12 @@
 
             camera.position.z = 5;
             
-            var loader = new THREE.GLTFLoader().setPath( 'models/scene/' );;
+            var loader = new THREE.GLTFLoader();
 
             // Load a glTF resource
             loader.load(
                 // resource URL
-                'scene.gltf',
+                'models/out.glb',
                 // called when the resource is loaded
                 function ( gltf ) {
                     // gltf.scene.traverse( function ( child ) {
