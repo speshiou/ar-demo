@@ -57,9 +57,25 @@
             }
             });
     </script>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            width: 100%;
+            height: 40px;
+            background-color: white;
+        }
+    </style>
   </head>
   <body>
-    <a-scene embedded arjs='trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'  
+    <a-scene embedded arjs='trackingMethod: best; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'  
         renderer="antialias: true; colorManagement: true;">
         <a-assets>
             <a-asset-item id="animated-asset" src="https://speshiou.github.io/models/scene.gltf"></a-asset-item>
@@ -82,12 +98,41 @@
         </a-marker>
         <a-marker preset='hiro'>
             <a-entity
+                id="ring"
                 gltf-model="#animated-asset"
-                scale="1"
+                scale="0.75 0.75 0.75"
+                position="0 -1 0"
                 sphere-env-map>
             </a-entity>
+            <a-cylinder id="finger" position="0 -1 0" radius="0.75" height="1.5" color="#F1C27D" rotation="90 0 0" scale="0.75 0.75 0.75" shadow></a-cylinder>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
+    <div id="footer">
+        <button id="btn-enlarge">+</button>
+        <button id="btn-shrink">-</button>
+    </div>
+    <script>
+        document.getElementById("btn-enlarge").addEventListener("click", function() {
+            var ring = document.getElementById("ring");
+            ring.object3D.scale.x += 0.1;
+            ring.object3D.scale.y += 0.1;
+            ring.object3D.scale.z += 0.1;
+            var finger = document.getElementById("finger");
+            finger.object3D.scale.x += 0.1;
+            finger.object3D.scale.y += 0.1;
+            finger.object3D.scale.z += 0.1;
+        });
+        document.getElementById("btn-shrink").addEventListener("click", function() {
+            var ring = document.getElementById("ring");
+            ring.object3D.scale.x -= 0.1;
+            ring.object3D.scale.y -= 0.1;
+            ring.object3D.scale.z -= 0.1;
+            var finger = document.getElementById("finger");
+            finger.object3D.scale.x -= 0.1;
+            finger.object3D.scale.y -= 0.1;
+            finger.object3D.scale.z -= 0.1;
+        });
+    </script>
   </body>
 </html>
