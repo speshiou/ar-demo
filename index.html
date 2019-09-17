@@ -1,46 +1,88 @@
-<!doctype HTML>
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    </head>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="Hello, WebVR! • A-Frame">
     <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
     <script src="https://raw.githack.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
-    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.0.1/dist/aframe-extras.min.js"></script>
+    <script>
+      AFRAME.registerComponent('sphere-env-map', {
+            schema: {
+                path: {default: ''},
+                extension: {default: 'jpg'},
+                format: {default: 'RGBFormat'},
+                enableBackground: {default: false}
+            },
 
-    <body style='margin : 0px; overflow: hidden;'>
-        <!-- we add detectionMode and matrixCodeType to tell AR.js to recognize barcode markers -->
-        <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+            init: function () {
+                const data = this.data;
+
+                // this.texture = new THREE.CubeTextureLoader().load([
+                // data.path + 'posx.' + data.extension, data.path + 'negx.' + data.extension,
+                // data.path + 'posy.' + data.extension, data.path + 'negy.' + data.extension,
+                // data.path + 'posz.' + data.extension, data.path + 'negz.' + data.extension
+                // ]);
+                // this.texture.format = THREE[data.format];
+
+                // if (data.enableBackground) {
+                // this.el.sceneEl.object3D.background = this.texture;
+                // }
+
+                var textureLoader = new THREE.TextureLoader();
+                this.textureSphere = textureLoader.load( "https://speshiou.github.io/ar/textures/metal.jpg" );
+                this.textureSphere.mapping = THREE.SphericalReflectionMapping;
+                this.textureSphere.encoding = THREE.sRGBEncoding;
+
+                this.applyEnvMap();
+                this.el.addEventListener('object3dset', this.applyEnvMap.bind(this));
+                // this.el.addEventListener('model-loaded', this.applyEnvMap.bind(this));
+            },
+
+            applyEnvMap: function () {
+                const mesh = this.el.getObject3D('mesh');
+                console.log("applyEnvMap " + mesh);
+                const envMap = this.textureSphere;
+
+                if (!mesh) return;
+
+                mesh.traverse(function (node) {
+                if (node.material && 'envMap' in node.material) {
+                    node.material.envMap = envMap;
+                    node.material.needsUpdate = true;
+                }
+                });
+            }
+            });
+    </script>
+  </head>
+  <body>
+    <a-scene embedded arjs='trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
         <a-assets>
             <a-asset-item id="animated-asset" src="https://speshiou.github.io/models/scene.gltf"></a-asset-item>
-            <a-asset-item id="env" src="https://speshiou.github.io/ar/textures/metal.jpg"></a-asset-item>
-            <!-- <a-asset-item id="ring-obj" src="https://speshiou.github.io/models/13456_Ruby_Ring_v1_l3.obj"></a-asset-item>
-            <a-asset-item id="ring-mtl" src="https://speshiou.github.io/models/13456_Ruby_Ring_v1_l3.mtl"></a-asset-item>
-            <a-asset-item id="ring2-obj" src="https://speshiou.github.io/models/the_crowned_ring.obj"></a-asset-item>
-            <a-asset-item id="ring2-mtl" src="https://speshiou.github.io/models/the_crowned_ring.mtl"></a-asset-item> -->
-            <!-- <a-asset-item id="demo-obj" src="https://rishavjayswal.github.io/augmented-reality/resources/couch.obj"></a-asset-item>
-            <a-asset-item id="demo-mtl" src="https://rishavjayswal.github.io/augmented-reality/resources/couch.mtl"></a-asset-item> -->
+            <a-asset-item id="test" src="https://speshiou.github.io/models/CesiumMan.gltf"></a-asset-item>
         </a-assets>
-        <!-- <a-obj-model src="#ring-obj" mtl="#ring-mtl"></a-obj-model>
-        <a-obj-model src="#ring2-obj" mtl="#ring2-mtl"></a-obj-model>
-        <a-gltf-model src="#animated-asset"></a-gltf-model> -->
-        <!-- <a-obj-model src="#demo-obj" mtl="#demo-mtl"></a-obj-model> -->
+        <!-- <a-entity
+            gltf-model="#animated-asset"
+            scale="1"
+            sphere-env-map>
+        </a-entity> -->
+        <a-marker type='barcode' value='6'>
+            <a-entity
+                gltf-model="#test"
+                scale="2">
+            </a-entity>
+        </a-marker>
         <a-marker type='barcode' value='7'>
-            <!-- <a-box position='0 0.5 0' color="yellow"></a-box> -->
-            <!-- <a-entity 
-            obj-model="obj: url(https://raw.githubusercontent.com/speshiou/speshiou.github.io/master/models/13456_Ruby_Ring_v1_l3.obj); 
-            mtl: url(https://raw.githubusercontent.com/speshiou/speshiou.github.io/master/models/13456_Ruby_Ring_v1_l3.mtl)">
-            </a-entity> -->
             <a-entity
                 gltf-model="#animated-asset"
                 scale="1"
-                material="envMap: #env">
+                sphere-env-map>
             </a-entity>
-            <!-- <a-entity obj-model="obj: #ring2-obj; mtl: #ring2-mtl"></a-entity> -->
         </a-marker>
-
-     
-
         <a-entity camera></a-entity>
-        </a-scene>
-    </body>
+    </a-scene>
+  </body>
 </html>
