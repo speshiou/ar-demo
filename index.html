@@ -59,7 +59,8 @@
     </script>
   </head>
   <body>
-    <a-scene embedded arjs='trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
+    <a-scene embedded arjs='trackingMethod: best; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'  
+        renderer="antialias: true; colorManagement: true;">
         <a-assets>
             <a-asset-item id="animated-asset" src="https://speshiou.github.io/models/scene.gltf"></a-asset-item>
             <a-asset-item id="test" src="https://speshiou.github.io/models/CesiumMan.gltf"></a-asset-item>
