@@ -9,19 +9,20 @@
 
     <body style='margin : 0px; overflow: hidden;'>
         <!-- we add detectionMode and matrixCodeType to tell AR.js to recognize barcode markers -->
-        <a-scene background="color: #FF0000">
+        <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
         <a-assets>
             <a-asset-item id="animated-asset" src="https://speshiou.github.io/models/scene.gltf"></a-asset-item>
-            <a-asset-item id="ring-obj" src="https://speshiou.github.io/models/13456_Ruby_Ring_v1_l3.obj"></a-asset-item>
+            <a-asset-item id="env" src="https://speshiou.github.io/ar/textures/metal.jpg"></a-asset-item>
+            <!-- <a-asset-item id="ring-obj" src="https://speshiou.github.io/models/13456_Ruby_Ring_v1_l3.obj"></a-asset-item>
             <a-asset-item id="ring-mtl" src="https://speshiou.github.io/models/13456_Ruby_Ring_v1_l3.mtl"></a-asset-item>
             <a-asset-item id="ring2-obj" src="https://speshiou.github.io/models/the_crowned_ring.obj"></a-asset-item>
-            <a-asset-item id="ring2-mtl" src="https://speshiou.github.io/models/the_crowned_ring.mtl"></a-asset-item>
-            <a-asset-item id="demo-obj" src="https://rishavjayswal.github.io/augmented-reality/resources/couch.obj"></a-asset-item>
-            <a-asset-item id="demo-mtl" src="https://rishavjayswal.github.io/augmented-reality/resources/couch.mtl"></a-asset-item>
+            <a-asset-item id="ring2-mtl" src="https://speshiou.github.io/models/the_crowned_ring.mtl"></a-asset-item> -->
+            <!-- <a-asset-item id="demo-obj" src="https://rishavjayswal.github.io/augmented-reality/resources/couch.obj"></a-asset-item>
+            <a-asset-item id="demo-mtl" src="https://rishavjayswal.github.io/augmented-reality/resources/couch.mtl"></a-asset-item> -->
         </a-assets>
-        <a-obj-model src="#ring-obj" mtl="#ring-mtl"></a-obj-model>
+        <!-- <a-obj-model src="#ring-obj" mtl="#ring-mtl"></a-obj-model>
         <a-obj-model src="#ring2-obj" mtl="#ring2-mtl"></a-obj-model>
-        <a-gltf-model src="#animated-asset"></a-gltf-model>
+        <a-gltf-model src="#animated-asset"></a-gltf-model> -->
         <!-- <a-obj-model src="#demo-obj" mtl="#demo-mtl"></a-obj-model> -->
         <a-marker type='barcode' value='7'>
             <!-- <a-box position='0 0.5 0' color="yellow"></a-box> -->
@@ -31,18 +32,13 @@
             </a-entity> -->
             <a-entity
                 gltf-model="#animated-asset"
-                scale="2">
+                scale="1"
+                material="envMap: #env">
             </a-entity>
             <!-- <a-entity obj-model="obj: #ring2-obj; mtl: #ring2-mtl"></a-entity> -->
         </a-marker>
 
-        <a-marker id="animated-marker" type='barcode' value='6'>
-            <!-- <a-entity
-                gltf-model="#animated-asset"
-                scale="2">
-            </a-entity> -->
-            <a-entity obj-model="obj: #ring-obj; mtl: #ring-mtl"></a-entity>
-        </a-marker>
+     
 
         <a-entity camera></a-entity>
         </a-scene>

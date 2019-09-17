@@ -10,14 +10,24 @@
         <script src="js/three.min.js"></script>
         <script src="js/GLTFLoader.js"></script>
         <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+        <!-- include jsartookit -->
+        <script src="js/jsartoolkit5/artoolkit.min.js"></script>
+        <script src="js/jsartoolkit5/artoolkit.api.js"></script>
+        <script src="js/jsartoolkit5/artoolkit.three.js"></script>
+        <!-- include threex.artoolkit -->
+        <script src="js/threex/threex-artoolkitsource.js"></script>
+        <script src="js/threex/threex-artoolkitcontext.js"></script>
+        <script src="js/threex/threex-arbasecontrols.js"></script>
+        <script src="js/threex/threex-armarkercontrols.js"></script>
 		<script>
+            var arToolkitSource, arToolkitContext;
             var textureSphere;
             var textureLoader = new THREE.TextureLoader();
-            textureSphere = textureLoader.load( "textures/metal.jpg" );
+            textureSphere = textureLoader.load( "https://speshiou.github.io/ar/textures/metal.jpg" );
             textureSphere.mapping = THREE.SphericalReflectionMapping;
             textureSphere.encoding = THREE.sRGBEncoding;
             var scene = new THREE.Scene();
-            let ambientLight = new THREE.AmbientLight( 0xcccccc, 1.0 );
+            let ambientLight = new THREE.AmbientLight( 0xffffff, 1.0 );
             scene.add( ambientLight );
 			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
@@ -34,13 +44,67 @@
 			scene.add( cube );
 
             camera.position.z = 5;
+
+            arToolkitSource = new THREEx.ArToolkitSource({
+                sourceType : 'webcam',
+            });
+            function onResize()
+            {
+                arToolkitSource.onResize()	
+                arToolkitSource.copySizeTo(renderer.domElement)	
+                if ( arToolkitContext.arController !== null )
+                {
+                    arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+                }	
+            }
+            arToolkitSource.init(function onReady(){
+                onResize()
+            });
+            
+            // handle resize event
+            window.addEventListener('resize', function(){
+                onResize()
+            });
+            
+            ////////////////////////////////////////////////////////////
+            // setup arToolkitContext
+            ////////////////////////////////////////////////////////////	
+            // create atToolkitContext
+            arToolkitContext = new THREEx.ArToolkitContext({
+                cameraParametersUrl: 'data/camera_para.dat',
+                detectionMode: 'mono'
+            });
+            
+            // copy projection matrix to camera when initialization complete
+            arToolkitContext.init( function onCompleted(){
+                camera.projectionMatrix.copy( arToolkitContext.getProjectionMatrix() );
+            });
+            ////////////////////////////////////////////////////////////
+            // setup markerRoots
+            ////////////////////////////////////////////////////////////
+            // build markerControls
+            markerRoot1 = new THREE.Group();
+            scene.add(markerRoot1);
+            let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
+                type: 'pattern', patternUrl: "data/hiro.patt",
+            })
+            let geometry1 = new THREE.PlaneBufferGeometry(1,1, 4,4);
+            // let loader = new THREE.TextureLoader();
+            // let texture = loader.load( 'images/earth.jpg', render );
+            let material1 = new THREE.MeshBasicMaterial( { color: 0x0000ff, opacity: 0.5 } );
+            mesh1 = new THREE.Mesh( geometry1, material1 );
+            mesh1.rotation.x = -Math.PI/2;
+            markerRoot1.add( mesh1 );
+            
+            function onProgress(xhr) { console.log( (xhr.loaded / xhr.total * 100) + '% loaded' ); }
+            function onError(xhr) { console.log( 'An error happened' ); }
             
             var loader = new THREE.GLTFLoader();
 
             // Load a glTF resource
             loader.load(
                 // resource URL
-                'models/out.glb',
+                'https://speshiou.github.io/ar/models/out.glb',
                 // called when the resource is loaded
                 function ( gltf ) {
                     gltf.scene.traverse( function ( child ) {
