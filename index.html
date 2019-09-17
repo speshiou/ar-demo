@@ -138,9 +138,9 @@
         document.getElementById("btn-enlarge").addEventListener("click", function() {
             var ring = document.getElementById("ring" + currentRing);
             var finger = document.getElementById("finger");
-            ring.object3D.scale.x += finger.object3D.scale.x;
-            ring.object3D.scale.y += finger.object3D.scale.y;
-            ring.object3D.scale.z += finger.object3D.scale.z;
+            ring.object3D.scale.x = finger.object3D.scale.x;
+            ring.object3D.scale.y = finger.object3D.scale.y;
+            ring.object3D.scale.z = finger.object3D.scale.z;
             ring.object3D.scale.x += 0.1;
             ring.object3D.scale.y += 0.1;
             ring.object3D.scale.z += 0.1;
@@ -151,9 +151,9 @@
         document.getElementById("btn-shrink").addEventListener("click", function() {
             var ring = document.getElementById("ring" + currentRing);
             var finger = document.getElementById("finger");
-            ring.object3D.scale.x += finger.object3D.scale.x;
-            ring.object3D.scale.y += finger.object3D.scale.y;
-            ring.object3D.scale.z += finger.object3D.scale.z;
+            ring.object3D.scale.x = finger.object3D.scale.x;
+            ring.object3D.scale.y = finger.object3D.scale.y;
+            ring.object3D.scale.z = finger.object3D.scale.z;
             ring.object3D.scale.x -= 0.1;
             ring.object3D.scale.y -= 0.1;
             ring.object3D.scale.z -= 0.1;
