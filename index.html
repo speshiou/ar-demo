@@ -168,7 +168,12 @@
             if (currentRing > totalRing) {
                 currentRing = 1;
             }
-            document.getElementById("ring" + currentRing).object3D.visible = true;
+            var newRing = document.getElementById("ring" + currentRing);
+            var finger = document.getElementById("finger");
+            newRing.object3D.scale.x = finger.object3D.scale.x;
+            newRing.object3D.scale.y = finger.object3D.scale.y;
+            newRing.object3D.scale.z = finger.object3D.scale.z;
+            newRing.object3D.visible = true;
         });
     </script>
   </body>
